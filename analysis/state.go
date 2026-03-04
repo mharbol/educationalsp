@@ -16,12 +16,49 @@ func NewState() State {
 	}
 }
 
-func (s *State) OpenDocument(uri, text string) {
-	s.Documents[uri] = text
+func getDaignosticsForFile(text string) []lsp.Diagnostic {
+	dianostics := []lsp.Diagnostic{}
+	for row, line := range strings.Split(text, "\n") {
+		if strings.Contains(line, "VS Code") {
+			idx := strings.Index(line, "VS Code")
+			dianostics = append(dianostics, lsp.Diagnostic{
+				Range:    LineRange(row, idx, idx+len("VS Code")),
+				Severity: 1, // 1== Error
+				Source:   "Common sense",
+				Message:  "Please use good language here",
+			})
+		}
+		if strings.Contains(line, "VS C*de") {
+			idx := strings.Index(line, "VS C*de")
+			dianostics = append(dianostics, lsp.Diagnostic{
+				Range:    LineRange(row, idx, idx+len("VS C*de")),
+				Severity: 2, // 2== Warning
+				Source:   "Common sense",
+				Message:  "A little better",
+			})
+		}
+		if strings.Contains(line, "Neovim") {
+			idx := strings.Index(line, "Neovim")
+			dianostics = append(dianostics, lsp.Diagnostic{
+				Range:    LineRange(row, idx, idx+len("Neovim")),
+				Severity: 4, // 4== Hint
+				Source:   "Common sense",
+				Message:  "Great choice",
+			})
+		}
+	}
+	return dianostics
 }
 
-func (s *State) UpdateDocument(uri, text string) {
+func (s *State) OpenDocument(uri, text string) []lsp.Diagnostic {
+	// also do diagnostic on open
 	s.Documents[uri] = text
+	return getDaignosticsForFile(text)
+}
+
+func (s *State) UpdateDocument(uri, text string) []lsp.Diagnostic {
+	s.Documents[uri] = text
+	return getDaignosticsForFile(text)
 }
 
 func (s *State) Hover(id int, uri string, position lsp.Position) lsp.HoverResponse {
@@ -82,7 +119,7 @@ func (s *State) TextDocumentCodeAction(id int, uri string) lsp.TextDocumentCodeA
 			censorChange[uri] = []lsp.TextEdit{
 				{
 					Range:   LineRange(row, idx, idx+len("VS Code")),
-					NewText: "VS C*ode",
+					NewText: "VS C*de",
 				},
 			}
 			actions = append(actions, lsp.CodeAction{
