@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	logger := getLogger("/Users/marcusharbol/development/educationalsp/log.txt")
+	logger := getLogger("./log.txt")
 	logger.Println("Hey, I started")
 
 	scanner := bufio.NewScanner(os.Stdin)
@@ -67,15 +67,14 @@ func handleMessage(logger *log.Logger, writer io.Writer, state *analysis.State, 
 		if err := json.Unmarshal(contents, &request); err != nil {
 			logger.Printf("textDocument/hover error: %s", err)
 		}
-		response := lsp.HoverResponse{
-			Response: lsp.Response{
-				RPC: "2.0",
-				ID:  &request.ID,
-			},
-			Result: lsp.HoverResult{
-				Contents: "Hello, from LSP",
-			},
+		response := state.Hover(request.ID, request.Params.TextDocument.URI, request.Params.Position)
+		writeResponse(writer, &response)
+	case "textDocument/definition":
+		var request lsp.DefinitionRequest
+		if err := json.Unmarshal(contents, &request); err != nil {
+			logger.Printf("textDocument/definition error: %s", err)
 		}
+		response := state.Definition(request.ID, request.Params.TextDocument.URI, request.Params.Position)
 		writeResponse(writer, &response)
 	}
 }

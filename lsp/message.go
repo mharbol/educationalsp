@@ -10,6 +10,7 @@ type Request struct {
 type Response struct {
 	RPC string `json:"jsonrpc"`
 	ID  *int   `json:"id,omitempty"` // LSP in other editors might not be string, in this case it could be null
+
 	// "result" and "error" are optional
 }
 
