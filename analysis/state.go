@@ -75,7 +75,7 @@ func (s *State) TextDocumentCodeAction(id int, uri string) lsp.TextDocumentCodeA
 				},
 			}
 			actions = append(actions, lsp.CodeAction{
-				Title: "Replace VS C*de with a superior editor",
+				Title: "Replace \"VS C*de\"with a superior editor",
 				Edit:  &lsp.WorkspaceEdit{Changes: replaceChange},
 			})
 			censorChange := map[string][]lsp.TextEdit{}
@@ -86,7 +86,7 @@ func (s *State) TextDocumentCodeAction(id int, uri string) lsp.TextDocumentCodeA
 				},
 			}
 			actions = append(actions, lsp.CodeAction{
-				Title: "Censor to VS C*de",
+				Title: "Censor to \"VS C*de\"",
 				Edit:  &lsp.WorkspaceEdit{Changes: censorChange},
 			})
 		}
@@ -97,6 +97,27 @@ func (s *State) TextDocumentCodeAction(id int, uri string) lsp.TextDocumentCodeA
 			ID:  &id,
 		},
 		Result: actions,
+	}
+	return response
+}
+
+func (s *State) TextDocumentCompletion(id int, uri string) lsp.CompletionResponse {
+
+	// ask tools for completion...
+	items := []lsp.CompletionItem{
+		{
+			// These get added by label
+			Label:         "Neovim, btw",
+			Detail:        "Cool editor",
+			Documentation: "Please work",
+		},
+	}
+	response := lsp.CompletionResponse{
+		Response: lsp.Response{
+			RPC: "2.0",
+			ID:  &id,
+		},
+		Result: items,
 	}
 	return response
 }
