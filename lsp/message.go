@@ -1,5 +1,12 @@
 package lsp
 
+const JSONRPC string = "2.0"
+
+type BaseMessage struct {
+	RPC    string `json:"jsonrpc"`
+	Method string `json:"method"`
+}
+
 type Request struct {
 	RPC    string `json:"jsonrpc"`
 	ID     int    `json:"id"` // LSP in other editors might not be string

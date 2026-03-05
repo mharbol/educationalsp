@@ -1,4 +1,4 @@
-package analysis
+package server
 
 import (
 	"educationalsp/lsp"
@@ -66,7 +66,7 @@ func (s *State) Hover(id int, uri string, position lsp.Position) lsp.HoverRespon
 	document := s.Documents[uri]
 	return lsp.HoverResponse{
 		Response: lsp.Response{
-			RPC: "2.0",
+			RPC: lsp.JSONRPC,
 			ID:  &id,
 		},
 		Result: lsp.HoverResult{
@@ -79,7 +79,7 @@ func (s *State) Definition(id int, uri string, position lsp.Position) lsp.Defini
 	// here we just go up one...
 	return lsp.DefinitionResponse{
 		Response: lsp.Response{
-			RPC: "2.0",
+			RPC: lsp.JSONRPC,
 			ID:  &id,
 		},
 		Result: lsp.Location{
@@ -130,7 +130,7 @@ func (s *State) TextDocumentCodeAction(id int, uri string) lsp.TextDocumentCodeA
 	}
 	response := lsp.TextDocumentCodeActionResponse{
 		Response: lsp.Response{
-			RPC: "2.0",
+			RPC: lsp.JSONRPC,
 			ID:  &id,
 		},
 		Result: actions,
@@ -151,7 +151,7 @@ func (s *State) TextDocumentCompletion(id int, uri string) lsp.CompletionRespons
 	}
 	response := lsp.CompletionResponse{
 		Response: lsp.Response{
-			RPC: "2.0",
+			RPC: lsp.JSONRPC,
 			ID:  &id,
 		},
 		Result: items,

@@ -2,6 +2,7 @@ package rpc_test
 
 import (
 	"educationalsp/rpc"
+	"fmt"
 	"testing"
 )
 
@@ -18,14 +19,16 @@ func TestEncoding(t *testing.T) {
 }
 
 func TestDecode(t *testing.T) {
-	incomingMessage := "Content-Length: 15\r\n\r\n{\"method\":\"hi\"}"
+	const CONTENT string = "{\"method\":\"hi\"}"
+	const LEN int = len(CONTENT)
+	incomingMessage := fmt.Sprintf("Content-Length: %d\r\n\r\n%s", LEN, CONTENT)
 	method, content, err := rpc.DecodeMessage([]byte(incomingMessage))
 	contentLength := len(content)
 	if nil != err {
 		t.Fatal(err)
 	}
-	if 15 != contentLength {
-		t.Fatalf("Expected: 15, Actual: %d", contentLength)
+	if LEN != contentLength {
+		t.Fatalf("Expected: %d, Actual: %d", LEN, contentLength)
 	}
 	if method != "hi" {
 		t.Fatalf("Expected: 'hi', Actual: %s", method)
