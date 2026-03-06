@@ -9,38 +9,54 @@ public class Server {
 
     public static void main(String[] args) {
         System.err.println("Start");
-        RpcReader reader = new RpcReader(System.in);
-        reader.read();
+        try (RpcReader reader = new RpcReader(System.in)) {
+            String jsonString;
+            while ((jsonString = reader.readRpcJson()) != null) {
+                handleStringMessage(jsonString);
+            }
+        } catch (Exception e) {
+            // Something....
+        }
     }
 
-    private static class RpcReader {
+    private static void handleStringMessage(String msg) {
+        System.err.println(msg);
+    }
+
+    private static class RpcReader implements AutoCloseable {
+
         private final InputStream inputStream;
+        private final BufferedReader bufferedReader;
 
         public RpcReader(InputStream inputStream) {
             this.inputStream = inputStream;
+            this.bufferedReader = new BufferedReader(new InputStreamReader(this.inputStream, StandardCharsets.UTF_8));
         }
 
-        private void read() {
-            try (BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(this.inputStream, StandardCharsets.UTF_8))) {
+        public String readRpcJson() {
+            try {
                 String line;
-                while ((line = reader.readLine()) != null) {
+                if ((line = bufferedReader.readLine()) != null) {
                     if (line.matches("^Content-Length: [0-9]+$")) {
                         String sz = line.substring("Content-Length: ".length());
-                        reader.read(); // \r
-                        reader.read(); // \n
-                        System.err.println("Len: " + sz);
+                        bufferedReader.read(); // \r
+                        bufferedReader.read(); // \n
                         CharBuffer buffer = CharBuffer.allocate(Integer.parseInt(sz));
-                        int x = reader.read(buffer);
+                        /* int x = */ bufferedReader.read(buffer);
                         buffer.flip();
                         String theString = buffer.toString();
-                        System.err.println("buffer: " + theString);
-                        System.err.println("x: " + x);
+                        return theString;
                     }
                 }
             } catch (IOException e) {
                 System.err.println(e);
             }
+            return null;
+        }
+
+        @Override
+        public void close() throws Exception {
+            this.bufferedReader.close();
         }
     }
 }
