@@ -12,7 +12,7 @@ import io.github.mharbol.json.JSONObject;
 import io.github.mharbol.json.parser.Parser;
 import io.github.mharbol.json.exception.JSONException;
 
-public class ServerMain {
+public class LanguageServerMain {
 
     public static final String LOGGER_NAME = "educationalsp";
 
