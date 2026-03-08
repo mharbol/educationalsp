@@ -6,6 +6,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.logging.Logger;
+
+import org.lbpl.lsp.ServerMain;
 
 public class RpcReader implements AutoCloseable {
 
@@ -26,6 +29,8 @@ public class RpcReader implements AutoCloseable {
      * Regex to verify a line reading "Content-Length: <number>"
      */
     private static final String CONTENT_LENGTH_REGEX = "^" + CONTENT_LENGTH_STR + "[0-9]+$";
+
+    private static Logger logger = Logger.getLogger(ServerMain.LOGGER_NAME);
 
     /**
      * Reader specifically made to read LSP messages from a client.
@@ -54,6 +59,7 @@ public class RpcReader implements AutoCloseable {
                     /* int x = */ bufferedReader.read(buffer);
                     buffer.flip();
                     String theString = buffer.toString();
+                    logger.fine("RECV: " + theString);
                     return theString;
                 }
             }
