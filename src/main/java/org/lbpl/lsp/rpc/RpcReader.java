@@ -8,7 +8,7 @@ import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
-import org.lbpl.lsp.ServerMain;
+import org.lbpl.lsp.LanguageServerMain;
 
 public class RpcReader implements AutoCloseable {
 
@@ -30,7 +30,7 @@ public class RpcReader implements AutoCloseable {
      */
     private static final String CONTENT_LENGTH_REGEX = "^" + CONTENT_LENGTH_STR + "[0-9]+$";
 
-    private static Logger logger = Logger.getLogger(ServerMain.LOGGER_NAME);
+    private static Logger logger = Logger.getLogger(LanguageServerMain.LOGGER_NAME);
 
     /**
      * Reader specifically made to read LSP messages from a client.
