@@ -28,15 +28,15 @@ public class ServerMain {
                 handleStringMessage(jsonString);
             }
         } catch (Exception e) {
-            // Something....
+            logger.log(Level.SEVERE, "Bad stuff", e);
         }
     }
 
     private static void handleStringMessage(String msg) throws JSONException {
         JSONObject jso = Parser.parseJSON(msg);
-        final String method = jso.get("method").serialize();
+        final String method = jso.get("method").toString();
         switch (method) {
-            case "\"initialize\"":
+            case "initialize":
                 logger.info("handling initialize");
                 break;
         }
