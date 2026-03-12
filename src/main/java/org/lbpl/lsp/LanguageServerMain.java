@@ -6,12 +6,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import org.lbpl.lsp.messages.InitializeRequestMessage;
 import org.lbpl.lsp.rpc.RpcReader;
 
 import io.github.mharbol.json.JSONObject;
 import io.github.mharbol.json.parser.Parser;
 import io.github.mharbol.json.exception.JSONException;
-
 public class LanguageServerMain {
 
     public static final String LOGGER_NAME = "educationalsp";
@@ -37,7 +37,9 @@ public class LanguageServerMain {
         final String method = jso.get("method").toString();
         switch (method) {
             case "initialize":
-                logger.info("handling initialize");
+                logger.info("handling initialize: ");
+                InitializeRequestMessage message = new InitializeRequestMessage(jso);
+                logger.info(message.toString());
                 break;
         }
     }
