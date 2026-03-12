@@ -1,5 +1,6 @@
 package org.lbpl.lsp.messages;
 
+import io.github.mharbol.json.JSONObject;
 import io.github.mharbol.json.JSONValue;
 
 /**
@@ -7,15 +8,19 @@ import io.github.mharbol.json.JSONValue;
  */
 public class ResponseMessage implements JSONWritable {
 
+    public final String jsonRpc;
     public final int id;
 
     public ResponseMessage(int id) {
         this.id = id;
+        this.jsonRpc = BaseMessage.JSON_RPC;
     }
 
 	@Override
 	public JSONValue toJson() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'toJson'");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", this.id);
+        jsonObject.put("jsonrpc", this.jsonRpc);
+        return jsonObject;
 	}
 }

@@ -8,8 +8,15 @@ import io.github.mharbol.json.JSONValue;
  */
 public class ServerInfo implements JSONWritable {
 
+    public static final String SERVER_NAME = "ed-java";
+    public static final String SERVER_VERSION = "0.0.1-beta";
+
     public final String name;
     public final String version;
+
+    public ServerInfo() {
+        this(SERVER_NAME, SERVER_VERSION);
+    }
 
     public ServerInfo(String name, String version) {
         this.name = name;

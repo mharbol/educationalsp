@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 import org.lbpl.lsp.messages.InitializeRequestMessage;
+import org.lbpl.lsp.messages.InitializeResponseMessage;
 import org.lbpl.lsp.rpc.RpcReader;
 
 import io.github.mharbol.json.JSONObject;
@@ -38,8 +39,15 @@ public class LanguageServerMain {
         switch (method) {
             case "initialize":
                 logger.info("handling initialize: ");
-                InitializeRequestMessage message = new InitializeRequestMessage(jso);
-                logger.info(message.toString());
+                InitializeRequestMessage requestMessage = new InitializeRequestMessage(jso);
+                logger.info(requestMessage.toString());
+                InitializeResponseMessage responseMessage = new InitializeResponseMessage(requestMessage.id);
+                final String responseJson = responseMessage.toJson().serialize();
+                final int responseJsonLen = responseJson.length();
+                logger.info(String.valueOf(responseJsonLen));
+                logger.info(responseJson);
+                final String theResponse = "Content-Length: " + responseJsonLen + "\r\n\r\n" + responseJson;
+                System.out.print(theResponse);
                 break;
         }
     }
