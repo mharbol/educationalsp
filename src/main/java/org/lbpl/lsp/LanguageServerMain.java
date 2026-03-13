@@ -9,10 +9,12 @@ import java.util.logging.SimpleFormatter;
 import org.lbpl.lsp.messages.InitializeRequestMessage;
 import org.lbpl.lsp.messages.InitializeResponseMessage;
 import org.lbpl.lsp.rpc.RpcReader;
+import org.lbpl.lsp.rpc.RpcWriter;
 
 import io.github.mharbol.json.JSONObject;
 import io.github.mharbol.json.parser.Parser;
 import io.github.mharbol.json.exception.JSONException;
+
 public class LanguageServerMain {
 
     public static final String LOGGER_NAME = "educationalsp";
@@ -23,17 +25,17 @@ public class LanguageServerMain {
     public static void main(String[] args) {
         initLogging();
         logger.info("Start");
-        try (RpcReader reader = new RpcReader(System.in)) {
+        try (RpcReader reader = new RpcReader(System.in); RpcWriter writer = new RpcWriter(System.out)) {
             String jsonString;
             while ((jsonString = reader.readRpcJson()) != null) {
-                handleStringMessage(jsonString);
+                handleStringMessage(jsonString, writer);
             }
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Bad stuff", e);
         }
     }
 
-    private static void handleStringMessage(String msg) throws JSONException {
+    private static void handleStringMessage(String msg, RpcWriter writer) throws JSONException, IOException {
         JSONObject jso = Parser.parseJSON(msg);
         final String method = jso.get("method").toString();
         switch (method) {
@@ -47,7 +49,8 @@ public class LanguageServerMain {
                 logger.info(String.valueOf(responseJsonLen));
                 logger.info(responseJson);
                 final String theResponse = "Content-Length: " + responseJsonLen + "\r\n\r\n" + responseJson;
-                System.out.print(theResponse);
+                // System.out.print(theResponse);
+                writer.writeString(theResponse);
                 break;
         }
     }

@@ -18,12 +18,12 @@ public class RpcReader implements AutoCloseable {
     /**
      * LSP header consistis of just "Content-Length: <number>"
      */
-    private static final String CONTENT_LENGTH_STR = "Content-Length: ";
+    protected static final String CONTENT_LENGTH_STR = "Content-Length: ";
 
     /**
      * Length of CONTENT_LENGTH_STR for substring-ing
      */
-    private static final int CONTENT_LENGTH_STR_LEN = CONTENT_LENGTH_STR.length();
+    protected static final int CONTENT_LENGTH_STR_LEN = CONTENT_LENGTH_STR.length();
 
     /**
      * Regex to verify a line reading "Content-Length: <number>"
