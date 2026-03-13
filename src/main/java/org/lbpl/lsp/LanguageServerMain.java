@@ -44,13 +44,7 @@ public class LanguageServerMain {
                 InitializeRequestMessage requestMessage = new InitializeRequestMessage(jso);
                 logger.info(requestMessage.toString());
                 InitializeResponseMessage responseMessage = new InitializeResponseMessage(requestMessage.id);
-                final String responseJson = responseMessage.toJson().serialize();
-                final int responseJsonLen = responseJson.length();
-                logger.info(String.valueOf(responseJsonLen));
-                logger.info(responseJson);
-                final String theResponse = "Content-Length: " + responseJsonLen + "\r\n\r\n" + responseJson;
-                // System.out.print(theResponse);
-                writer.writeString(theResponse);
+                writer.writeJsonMessage(responseMessage);
                 break;
         }
     }
