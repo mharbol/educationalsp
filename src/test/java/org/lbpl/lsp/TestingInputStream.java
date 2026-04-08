@@ -16,7 +16,7 @@ public class TestingInputStream extends InputStream {
     public final StringCharacterIterator charIter = new StringCharacterIterator("");
 
     public void writeString(String string) {
-        if (null != string) {
+        if (null != string && !string.isEmpty()) {
             strings.add(string);
         }
     }
@@ -29,12 +29,8 @@ public class TestingInputStream extends InputStream {
         } else {
             String currString = strings.poll();
             if (null != currString) {
-                if (!currString.isEmpty()) {
-                    charIter.setText(currString);
-                    return charIter.first();
-                } else {
-                    return read();
-                }
+                charIter.setText(currString);
+                return charIter.first();
             }
         }
         return -1;
